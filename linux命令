@@ -1,0 +1,41 @@
+ln –s 源文件 目标文件
+
+
+
+sftp连接：
+sftp -P 33904 root@183.129.199.122
+
+
+
+mkdir [-p] DirName
+说明：建立一个子目录。
+参数：-p 确保目录名称存在，如果目录不存在的就新创建一个。
+
+
+
+
+压缩：
+tar.gz tgz (tar.gz和tgz只是两种不同的书写方式，后者是一种简化书写，等同处理)
+这种格式是Linux下使用非常普遍的一种压缩方式，
+兼顾了压缩时间（耗费CPU）和压缩空间（压缩比率）
+其实这是对tar包进行gzip算法的压缩
+
+(1)打包压缩格式：
+tar -zcvf examples.tgz examples (examples当前执行路径下的目录)
+
+说明：
+-z, --gzip filter the archive through gzip 通过gzip压缩的形式对文件进行归档
+
+举例：
+tar -zcvf file.tgz dir #dir目录
+
+(2)释放解压格式：
+
+tar -zxvf examples.tar （解压至当前执行目录下）
+tar -zxvf examples.tar  -C /path (/path 解压至其它路径)
+
+举例：
+tar -zcvf file.tgz
+tar -zcvf file.tgz -C /temp
+
+

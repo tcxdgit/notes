@@ -1,0 +1,101 @@
+
+tokenization.py
+
+1、BasicTokenizer
+BasicTokenizer的主要是进行unicode转换、标点符号分割、小写转换、中文字符分割、去除重音符号等操作，最后返回的是关于词的数组（中文是字的数组）
+
+2、WordpieceTokenizer
+WordpieceTokenizer的目的是将合成词分解成类似词根一样的词片。例如将"unwanted"分解成["un", "##want", "##ed"]这么做的目的是防止因为词的过于生僻没有被收录进词典最后只能以[UNK]代替的局面，因为英语当中这样的合成词非常多，词典不可能全部收录。
+
+3、FullTokenizer
+FullTokenizer的作用就很显而易见了，对一个文本段进行以上两种解析，最后返回词（字）的数组，同时还提供token到id的索引以及id到token的索引。这里的token可以理解为文本段处理过后的最小单元。
+
+
+run_classifier.py
+python run_classifier.py
+  --data_dir=./data
+  --task_name=news
+  --vocab_file=./chinese_L-12_H-768_A-12/vocab.txt
+  --bert_config_file=./chinese_L-12_H-768_A-12/bert_config.json
+  --output_dir=./output
+  --do_train=true
+  --do_predict=true
+  --do_eval=true
+  --init_checkpoint=./chinese_L-12_H-768_A-12/bert_model.ckpt
+  --max_seq_length=200
+  --train_batch_size=16
+  --learning_rate=5e-5
+  --num_train_epochs=5.0
+
+pretrain
+（sample_text）
+INFO:tensorflow:***** Eval results *****
+INFO:tensorflow:  global_step = 20
+INFO:tensorflow:  loss = 0.38860756
+INFO:tensorflow:  masked_lm_accuracy = 0.91499466
+INFO:tensorflow:  masked_lm_loss = 0.38411248
+INFO:tensorflow:  next_sentence_accuracy = 1.0
+INFO:tensorflow:  next_sentence_loss = 0.0005111539
+
+(sample_text_cn)
+--input_file=./output_example_cn/tf_examples.tfrecord
+--output_dir=./pretraining_output_cn
+--do_train=True
+--do_eval=True
+--bert_config_file=./chinese_L-12_H-768_A-12/bert_config.json
+--init_checkpoint=./chinese_L-12_H-768_A-12/bert_model.ckpt
+--train_batch_size=32
+--max_seq_length=300
+--max_predictions_per_seq=45
+--num_train_steps=200
+--num_warmup_steps=10
+--learning_rate=2e-5
+
+耗时6小时以上（64G cpu）
+
+
+
+[SEP] 是用于分割两个句子的符号
+
+
+create_data
+参数：
+
+max_predictions_per_seq：每个序列里最大的masked lm predictions。建议设置为max_seq_length*masked_lm_prob（这个脚本不会自动设置）
+
+
+准确率记录
+INFO:tensorflow:evaluation_loop marked as finished
+INFO:tensorflow:***** Eval results *****
+INFO:tensorflow:  global_step = 200
+INFO:tensorflow:  loss = 0.1996308
+INFO:tensorflow:  masked_lm_accuracy = 0.953531
+INFO:tensorflow:  masked_lm_loss = 0.1944049
+INFO:tensorflow:  next_sentence_accuracy = 0.99875
+INFO:tensorflow:  next_sentence_loss = 0.0052026785
+
+
+python extract_features.py \
+  --input_file=input.txt \
+  --output_file=/tmp/output.json \
+  --vocab_file=$BERT_BASE_DIR/vocab.txt \
+  --bert_config_file=$BERT_BASE_DIR/bert_config.json \
+  --init_checkpoint=$BERT_BASE_DIR/bert_model.ckpt \
+  --layers=-1,-2,-3,-4 \
+  --max_seq_length=128 \
+  --batch_size=8
+  
+  
+  
+export CUDA_VISIBLE_DEVICES=3
+  
+  
+  
+  INFO:tensorflow:Wrote 19025708 total instances
+
+  
+  
+  
+  
+
+
