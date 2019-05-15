@@ -39,3 +39,4 @@ tar -zcvf file.tgz
 tar -zcvf file.tgz -C /temp
 
 
+Acquire::http::Proxy "http://100.0.4.195:808"
