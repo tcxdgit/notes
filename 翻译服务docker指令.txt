@@ -1,0 +1,43 @@
+
+
+tensor2tensor容器：
+
+# 新建容器
+nvidia-docker run -id --name tcx-t2t -v /root/tcxia:/tcxia myt2t:v2
+
+# 进入容器
+nvidia-docker exec -it tcx-t2t bash
+
+
+# 准备数据、模型（可选）
+bash prepare_cisco.sh
+bash self_run.sh
+
+cd /tcxia/MachineTranslation_t2t/train/
+
+导出模型为tf serving需要的格式（可能会出现GPU被占，显存不足）
+bash export_model.sh
+
+
+
+
+tensorflow-serving容器
+
+# 新建容器
+nvidia-docker run -id --name tf-serving -v /root/tcxia:/tcxia -p 9000:9000 tensorflow/serving:latest
+ 
+# 进入容器
+nvidia-docker exec -it tf-serving bash
+
+# 启动服务
+cd /tcxia/MachineTranslation_t2t/train/
+bash server.sh
+
+
+
+
+
+
+
+
+
