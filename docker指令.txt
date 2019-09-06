@@ -38,5 +38,8 @@ docker search deepo
 deepo容器里默认编码为ASCII，改为utf-8
 export LANG=C.UTF-8
 
-
-
+nvidia-docker出错：
+Error when trying run nvidia-docker
+改成：
+docker run --runtime=nvidia -it --name tcx-tf 16b78c7dca13
+（https://github.com/NVIDIA/nvidia-docker/issues/883）
