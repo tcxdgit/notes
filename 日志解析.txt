@@ -1,0 +1,286 @@
+
+<PRI>TIMESTAMP Sysname %%vendorMODULE/severity/MNEMONIC: location; CONTENT
+Prefix TIMESTAMP Sysname MODULE/severity/MNEMONIC: CONTENT
+
+
+<PRI> 
+优先级标识符，仅存在于输出方向为日志主机的日志信息。优先级的计算公式为：facility× 8＋severity
+• facility 表示日志主机的记录工具，由 info-center loghost 命令设置，主要用
+于在日志主机端标志不同的日志来源，查找、过滤对应日志源的日志。
+• severity表示日志信息的严重等级，具体含义请参见 表 2
+
+Prefix
+信息类型标识符，仅存在于输出方向为非日志主机方向的日志信息
+• 百分号（ %）：表示该日志信息为 Informational 级别及以上级别的日志
+• 星号（ *）：表示该日志信息为 Debug 级别的日志
+
+TIMESTAMP
+时间戳记录了日志信息产生的时间，方便用户查看和定位系统事件
+• 日志主机方向：时间戳精确到秒，用户可以通过 info-center timestamp
+loghost 命令自定义时间显示格式
+• 非日志主机方向：时间戳精确到毫秒，用户可以通过 info-center
+timestamp 命令自定义时间显示格式
+
+Sysname
+生成该日志信息的设备的名称或IP地址
+
+%%vendor
+厂家标志， %%10表示本字段表示本日志信息由H3C设备生成。
+本字段只有在日志信息发往日志主机时才会存在。
+
+MODULE
+生成该日志信息的功能模块的名称。
+
+severity
+日志信息的等级，具体说明请参见表1-2。
+
+
+
+
+grok {
+        match => {
+            "message" => "<%{NUMBER:pri:int}>(?<logTime>(%{MONTH} +%{MONTHDAY} %{TIME}( %{YEAR})?|%{MONTH} +%{MONTHDAY} %{YEAR} %{TIME})) %{DATA:loghostname} %%%{NUMBER}%{DATA:module}/%{NUMBER:severity:int}/%{DATA:logTypeDesc}:(( -%{DATA:location};)?|(s)?) +%{GREEDYDATA:desc}"
+        }
+    }
+    
+    date {
+        match => [ "logTime", "MMM dd HH:mm:ss YYYY",  "MMM dd YYYY HH:mm:ss", "MMM dd HH:mm:ss", "YYYY/MM/dd HH:mm:ss", "MMM  d HH:mm:ss YYYY", "MMM  d YYYY HH:mm:ss", "MMM dd HH:mm:ss", "ISO8601" ]
+        target => "logTime"
+    }
+    
+    kv {
+            source => "location"
+            field_split => "-"
+            value_split => "="
+            remove_field => ["location"]
+    }
+    
+    uuid {
+        target => "ldp_uuid"
+        overwrite => true
+    }
+    
+    mutate {
+        rename => {
+            "host" => "ldp_host_ip"
+        }
+        remove_field => ["timestamp"]
+        add_field => {
+            "ldp_timestamp" => "%{@timestamp}"
+        }
+    }
+    
+    if[module]== "SHELL" {
+        grok {
+            match => {
+                "desc" => "((%{GREEDYDATA:params};)?)((s)?)%{GREEDYDATA:msg}"
+            }
+        }
+        new_kv {
+            source => "params"
+            field_split => "-"
+            value_split => "="
+            omit_empty_fields => false
+            trim_value_split => false
+            include_brackets => false
+            remove_field => ["params"]
+        }
+        if[logTypeDesc]== "SHELL_CMD" or [logTypeDesc]== "SHELL_CMD(l)"{
+            grok {
+                match => {
+                    "msg" => "Command is %{GREEDYDATA:command}"
+                }
+            }
+        }else if[logTypeDesc]== "SHELL_CMD_CONFIRM"{
+            grok {
+                match => {
+                    "msg" => "Confirm option of command %{DATA:command} is %{DATA:result}.$"
+                }
+            }
+        }else if[logTypeDesc]== "SHELL_CMD_EXECUTEFAIL"{
+            grok {
+                match => {
+                    "msg" => "Command %{DATA:command} in view %{DATA:view} failed to be executed."
+                }
+            }
+        }else if[logTypeDesc]== "SHELL_CMD_MATCHFAIL"{
+            grok {
+                match => {
+                    "msg" => "Command %{DATA:command} in view %{DATA:view} failed to be matched."
+                }
+            }
+        }else if[logTypeDesc]== "SHELL_LOGIN" or [logTypeDesc]== "SHELL_LOGIN(l)"{
+            grok {
+                match => {
+                    "msg" => "%{DATA:user} logged in from %{DATA:userIp}.$"
+                }
+                add_field => {"action" => "login"}
+            }
+        }else if[logTypeDesc]== "SHELL_LOGOUT" or [logTypeDesc]== "SHELL_LOGOUT(l)" {
+            grok {
+                match => {
+                    "msg" => "%{DATA:user} logged out from %{DATA:userIp}.$"
+                }
+                add_field => {"action" => "logout"}
+            }
+        }else if[logTypeDesc]== "LOGIN(t)" or [logTypeDesc]== "LOGOUT(t)" {
+            grok {
+                match => {
+                    "msg" => ".:%{DATA:user} %{DATA:action} from %{GREEDYDATA:userIp}"
+                }
+            }
+        }else if[logTypeDesc]== "LOGIN_FAILED"  {
+                        
+                        grok {
+                                 match => {
+                                           "msg" => "%{DATA:user} failed to log in from %{DATA:userIp}."
+                                 }
+                        }
+        }
+    } else {
+        mutate { 
+            add_field => { "msg" => "%{desc}"}
+        }
+        if[logTypeDesc]== "INTERFACE UPDOWN(t)" {
+            grok {
+                match => {
+                    "msg" => ".: Interface %{NUMBER:interface} is %{GREEDYDATA:interfaceStatus}, ifAdminStatus is %{NUMBER:ifAdminStatus:int}, ifOperStatus is %{NUMBER:ifOperStatus:int}"
+                }
+            }
+        }else if[logTypeDesc]== "LINK_UPDOWN" {
+            grok {
+                match => {
+                    "msg" => "Line protocol on the interface %{GREEDYDATA:interface} is %{GREEDYDATA:interfaceStatus}."
+                }
+            }
+        }else if[logTypeDesc]== "LINK_UPDOWN(l)" or [logTypeDesc]== "PHY_UPDOWN" {
+            grok {
+                match => {
+                    "msg" => "%{GREEDYDATA:interface} link status is %{GREEDYDATA:interfaceStatus}."
+                }
+            }
+        }else if[logTypeDesc]== "SSHS_AUTH_EXCEED_RETRY_TIMES"  {
+            grok {
+                match => {
+                     "msg" => "SSH user %{DATA:user} \\(IP: %{DATA:userIp}\\) failed to log in, because the number of authentication attempts exceeded the upper limit.[\\u0000]?"
+                }
+            }
+        } else if[logTypeDesc]== "SSHS_CONNECT"  {
+                        
+            grok {
+                     match => {
+                               "msg" => "SSH user %{DATA:user} \\(IP: %{DATA:userIp}\\) connected to the server successfully.[\\u0000]?"
+                     }
+            }
+        } else if[logTypeDesc]== "SSHS_DISCONNECT"  {                       
+            grok {
+                     match => {
+                               "msg" => "SSH user %{DATA:user} \\(IP: %{DATA:userIp}\\) disconnected from the server.[\\u0000]?"
+                     }
+            }
+        } else if[logTypeDesc]== "SSHS_LOG"  {            
+            grok {
+                     match => {
+                               "msg" => "Authentication failed for %{DATA:user} from %{DATA:userIp} port %{DATA:userPort} ssh2.[\\u0000]?"
+                     }
+            }
+        }
+    }   
+    
+    mutate {
+        lowercase => [ "interfaceStatus" ]
+    }
+    if [severity] == 0 {
+        mutate { 
+            add_field => { "severityLevel" => "危急" }
+        }
+    } else if [severity] == 1 {
+        mutate { 
+            add_field => { "severityLevel" => "报警" }
+        }
+    } else if [severity] == 2 {
+        mutate { 
+            add_field => { "severityLevel" => "严重" }
+        }
+    } else if [severity] == 3 {
+        mutate { 
+            add_field => { "severityLevel" => "错误" }
+        }
+    } else if [severity] == 4 {
+        mutate { 
+            add_field => { "severityLevel" => "告警" }
+        }
+    } else if [severity] == 5 {
+        mutate { 
+            add_field => { "severityLevel" => "提示" }
+        }
+    } else if [severity] == 6 {
+        mutate { 
+            add_field => { "severityLevel" => "信息" }
+        }
+    } else if [severity] == 7 {
+        mutate { 
+            add_field => { "severityLevel" => "调试" }
+        }
+    } else {    
+        mutate { 
+            add_field => { "severityLevel" => "未知" }
+        }
+    }   
+
+    mutate {
+        remove_field => ["desc"]
+    }
+    
+    ruby {
+        code => "
+            event.to_hash.each do |k, v|
+                if ''.eql?(v)
+                    event.remove(k)
+                end
+            end
+        "
+    }
+    
+    if "_grokparsefailure" in [tags] or "_dateparsefailure" in [tags] or "_geoip_lookup_failure" in [tags] or "_jsonparsefailure" in [tags] or "_rubyexception" in [tags] {
+        mutate { 
+            add_field => { "parse_success" => false }
+        }
+    } else {
+        mutate {
+            add_field => { "parse_success" => true }
+        }
+        mutate {
+            remove_field => ["message"]
+        }       
+    }
+    
+    if "_grokparsefailure" in [tags] {
+        mutate { 
+            add_field => { "failure_reason" => "grok解析失败" }
+        }
+    }
+    
+    if "_dateparsefailure" in [tags] {
+        mutate { 
+            add_field => { "failure_reason" => "date解析失败" }
+        }
+    }
+    
+    if "_geoip_lookup_failure" in [tags] {
+        mutate { 
+            add_field => { "failure_reason" => "ip解析失败" }
+        }
+    }
+
+    if "_jsonparsefailure" in [tags] {
+        mutate { 
+            add_field => { "failure_reason" => "json解析失败" }
+        }
+    }
+
+    if "_rubyexception" in [tags] {
+        mutate { 
+            add_field => { "failure_reason" => "ruby解析失败" }
+        }
+    }

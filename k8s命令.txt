@@ -1,0 +1,14 @@
+#查看pod
+kubectl get pods -nitoa
+
+#进入pod
+kubectl exec -it itoa-task-rc-29853fbd-85f4-4f90-a56f-5472bf202474-nzkcx bash  -nitoa
+
+#查找snmp相关pod
+kubectl get po -nitoa |grep snmp
+
+# 查找snmp相关pod，显示所在节点
+kubectl get po -nitoa -owide |grep snmp
+
+# 
+

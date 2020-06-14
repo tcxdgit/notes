@@ -1,0 +1,58 @@
+
+http://tech.h3c.com/
+用户名:t19525
+密码:LEoW7tVW
+
+
+SNA 195 环境
+登陆地址：http://10.99.210.195:10080/portal/
+用户名：admin
+密码： admin@123 
+
+数据库 10.99.210.191  5400
+用户 itoatask
+密码 itoatask
+
+10.99.210.191
+10.99.210.192
+10.99.210.193
+登陆用户名均为root，密码均为123456
+
+
+服务器：
+黄区：
+10.99.210.206/207
+user: root
+password: 123456
+
+
+虚机IP: 
+	10.113.250.200/201(堡垒机)
+	172.28.8.60  root/123456789
+	
+	desk-bj.h3c.com
+	
+	172.28.9.228(跳转机)
+	username: tcxia
+	passward: 123456
+	----------------
+	192.168.0.22
+	ssh ai@tiancuixia-1.ai
+	passward: 123456
+	
+	172.28.8.71
+	username: administrator
+	passward: default2010
+	
+	ssh h3cai01@gpu.zhaotinghai.cn -p 10022
+	passward: aiaiai
+	
+	
+	AI研究院北京绿区虚机
+	172.28.28.74
+	
+	
+公盘地址:
+	\\h3cbjnt21-fs\AI研究院
+	\\h3c-hzfs\Software\Application
+	\\h3c-infoserver\06-H3C-中文手册\01-生产归档
