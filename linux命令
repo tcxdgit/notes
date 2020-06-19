@@ -1,10 +1,25 @@
+
+查看ip地址
+hostname -i
+
+监听特定网卡ens1f0，抓包
+tcpdump -i ens1f0 udp port 514
+
+# 杀死僵尸进程
+ps -ef | grep defunct | more
+kill掉对应的父进程
+
+
+查看centos版本
+rpm -q centos-release
+
+
 ln –s 源文件 目标文件
 
 
 
 sftp连接：
 sftp -P 33904 root@183.129.199.122
-
 
 
 mkdir [-p] DirName
@@ -40,3 +55,7 @@ tar -zcvf file.tgz -C /temp
 
 
 Acquire::http::Proxy "http://100.0.4.195:808"
+
+3.2.119.5服务器，监听特定网卡ens1f0，抓包
+tcpdump -i ens1f0 udp port 514
+

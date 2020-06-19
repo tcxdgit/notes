@@ -71,8 +71,8 @@ int GigabitEthernet 2/0
 undo ip address 112.40.40.5 24
 ip address 112.40.40.4 24
 
-
-
+# 查看info-center相关配置
+disp current-configuration  | include  info-center
 
 
 

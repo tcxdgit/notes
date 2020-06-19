@@ -1,0 +1,10 @@
+
+
+从2017年的rsyslog 8.31.0（旧的版本命名规则）开始，才支持IPv6；
+
+
+# 查看rsyslog版本
+rsyslogd --version
+
+# rsyslog配置文件
+/etc/rsyslog.d目录下的*.conf文件

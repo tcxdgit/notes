@@ -1,4 +1,14 @@
+
+可以列出本机所有java进程的pid
+jps 
+-v 输出jvm参数
+
+
+
 mvn clean install -DskipTests
 
 修改配置：
 D:\projects\es-container\health\package\itoa-3.0\metadata\scripts\web-backend-props\itoa-data-collection.properties
+
+
+
