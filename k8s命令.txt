@@ -48,7 +48,8 @@ kubectl cp net-tools-2.0-0.25.20131004git.el7.x86_64.rpm itoa/itoa-rsyslog-6bc6c
   # Copy /tmp/foo local file to /tmp/bar in a remote pod in namespace <some-namespace>
   kubectl cp /tmp/foo <some-namespace>/<some-pod>:/tmp/bar
 
-
+# 查看集群中其他节点的ip
+kubectl get node -o wide -n itoa
 
 
 
