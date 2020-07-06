@@ -3,13 +3,7 @@ python3.5以上
 tf
 nltk
 tensorflow >= 1.11.0   # CPU Version of TensorFlow.
-# tensorflow-gpu  >= 1.11.0  # GPU version of TensorFlow.
+// tensorflow-gpu  >= 1.11.0  # GPU version of TensorFlow.
 pyltp(仅支持python3.5/3.6)
-
-
 bert
 git
-
-
-
-
