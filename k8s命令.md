@@ -45,14 +45,19 @@
 复制文件到pod里
 ```bash
 kubectl cp net-tools-2.0-0.25.20131004git.el7.x86_64.rpm itoa/itoa-rsyslog-6bc6c4fc8b-xrjjg:/packages
-#Copy /tmp/foo local file to /tmp/bar in a remote pod in namespace <some-namespace>
-  kubectl cp /tmp/foo <some-namespace>/<some-pod>:/tmp/bar
+
+# # Copy /tmp/foo local file to /tmp/bar in a remote pod in namespace <some-namespace> 
+# kubectl cp /tmp/foo <some-namespace>/<some-pod>:/tmp/bar
 ```
 
 查看集群中其他节点的ip
 `kubectl get node -o wide -n itoa`
 
 
+
+查看pod对应的containers
+
+`kubectl describe pod/itoa-collect-multi-8694cd59d4-gqr2t -n itoa`
 
 
 
