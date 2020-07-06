@@ -1,45 +1,43 @@
-
 列出所有镜像
-docker images
+`docker images`
 
 列出所有正在运行的容器
-docker ps
+`docker ps`
 列出所有容器
-docker -a
+`docker -a`
 
 新建容器
-sudo nvidia-docker run -p 5592:5592 -p 5593:5593 -p 8022:22 --name="liuzhen_tf" -v ~/workspace/liuzhen/remote_workspace:/workspace/liuzhen/remote_workspace -it tensorflow/tensorflow:latest-gpu /bin/bash
+`sudo nvidia-docker run -p 5592:5592 -p 5593:5593 -p 8022:22 --name="liuzhen_tf" -v ~/workspace/liuzhen/remote_workspace:/workspace/liuzhen/remote_workspace -it tensorflow/tensorflow:latest-gpu /bin/bash`
 
-nvidia-docker run -id --name tcx-deepo -v /home/h3cai01/tcxia/bert:/PythonProjects  6b0fd579fe20
+`nvidia-docker run -id --name tcx-deepo -v /home/h3cai01/tcxia/bert:/PythonProjects  6b0fd579fe20`
 
 
 
 进入容器
-nvidia-docker exec -it tcx-deepo bash
+`nvidia-docker exec -it tcx-deepo bash`
 退出容器
-exit
+`exit`
 
 停止容器
-docker stop tcx-deepo
+`docker stop tcx-deepo`
 
 移除容器
-docker rm tcx-deepo
+`docker rm tcx-deepo`
 
 查看log
-docker logs tcx-tf
+`docker logs tcx-tf`
 
 重启docker
-docker restart tcx-tf
+`docker restart tcx-tf`
 
 查找镜像
-docker search deepo
-
+`docker search deepo`
 
 deepo容器里默认编码为ASCII，改为utf-8
-export LANG=C.UTF-8
+`export LANG=C.UTF-8`
 
 nvidia-docker出错：
-Error when trying run nvidia-docker
+`Error when trying run nvidia-docker`
 改成：
-docker run --runtime=nvidia -it --name tcx-tf 16b78c7dca13
+`docker run --runtime=nvidia -it --name tcx-tf 16b78c7dca13`
 （https://github.com/NVIDIA/nvidia-docker/issues/883）
