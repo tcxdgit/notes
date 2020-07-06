@@ -1,8 +1,14 @@
-
 为git设置代理，链接GitHub：
-  'git config --global http.proxy <username>:<password>@proxy:port' 
-  'git config --global https.proxy <username>:<password>@proxy:port'
+`git config --global http.proxy <username>:<password>@proxy:port`
+`git config --global https.proxy <username>:<password>@proxy:port`
 
-  
-  git config --global http.proxy :@devproxy.h3c.com:8080
-  git config --global https.proxy :@devproxy.h3c.com:8080
+`git config --global http.proxy :@devproxy.h3c.com:8080`
+`git config --global https.proxy :@devproxy.h3c.com:8080`
+
+查看git配置信息
+
+`git config --list`
+
+回退a.py这个文件的版本到上一个版本
+`git reset HEAD^ a.py`
+
