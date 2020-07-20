@@ -1,48 +1,59 @@
 
-<PRI>TIMESTAMP Sysname %%vendorMODULE/severity/MNEMONIC: location; CONTENT
-Prefix TIMESTAMP Sysname MODULE/severity/MNEMONIC: CONTENT
 
 
-<PRI> 
+
+`<PRI>TIMESTAMP Sysname %%vendorMODULE/severity/MNEMONIC: location; CONTENT`
+`Prefix TIMESTAMP Sysname MODULE/severity/MNEMONIC: CONTENT`
+
+###### <PRI> 
+
 优先级标识符，仅存在于输出方向为日志主机的日志信息。优先级的计算公式为：facility× 8＋severity
 • facility 表示日志主机的记录工具，由 info-center loghost 命令设置，主要用
 于在日志主机端标志不同的日志来源，查找、过滤对应日志源的日志。
 • severity表示日志信息的严重等级，具体含义请参见 表 2
 
-Prefix
+###### Prefix
+
 信息类型标识符，仅存在于输出方向为非日志主机方向的日志信息
 • 百分号（ %）：表示该日志信息为 Informational 级别及以上级别的日志
 • 星号（ *）：表示该日志信息为 Debug 级别的日志
 
-TIMESTAMP
+###### TIMESTAMP
+
 时间戳记录了日志信息产生的时间，方便用户查看和定位系统事件
 • 日志主机方向：时间戳精确到秒，用户可以通过 info-center timestamp
 loghost 命令自定义时间显示格式
 • 非日志主机方向：时间戳精确到毫秒，用户可以通过 info-center
 timestamp 命令自定义时间显示格式
 
-Sysname
+###### Sysname
+
 生成该日志信息的设备的名称或IP地址
 
-%%vendor
+###### %%vendor
+
 厂家标志， %%10表示本字段表示本日志信息由H3C设备生成。
 本字段只有在日志信息发往日志主机时才会存在。
 
-MODULE
+###### MODULE
+
 生成该日志信息的功能模块的名称。
 
-severity
+###### severity
+
 日志信息的等级，具体说明请参见表1-2。
 
+###### logstash解析规则
 
 
-
+```ruby
 grok {
         match => {
             "message" => "<%{NUMBER:pri:int}>(?<logTime>(%{MONTH} +%{MONTHDAY} %{TIME}( %{YEAR})?|%{MONTH} +%{MONTHDAY} %{YEAR} %{TIME})) %{DATA:loghostname} %%%{NUMBER}%{DATA:module}/%{NUMBER:severity:int}/%{DATA:logTypeDesc}:(( -%{DATA:location};)?|(s)?) +%{GREEDYDATA:desc}"
         }
     }
     
+
     date {
         match => [ "logTime", "MMM dd HH:mm:ss YYYY",  "MMM dd YYYY HH:mm:ss", "MMM dd HH:mm:ss", "YYYY/MM/dd HH:mm:ss", "MMM  d HH:mm:ss YYYY", "MMM  d YYYY HH:mm:ss", "MMM dd HH:mm:ss", "ISO8601" ]
         target => "logTime"
@@ -227,7 +238,7 @@ grok {
             add_field => { "severityLevel" => "未知" }
         }
     }   
-
+    
     mutate {
         remove_field => ["desc"]
     }
@@ -272,15 +283,31 @@ grok {
             add_field => { "failure_reason" => "ip解析失败" }
         }
     }
-
+    
     if "_jsonparsefailure" in [tags] {
         mutate { 
             add_field => { "failure_reason" => "json解析失败" }
         }
     }
-
+    
     if "_rubyexception" in [tags] {
         mutate { 
             add_field => { "failure_reason" => "ruby解析失败" }
         }
     }
+```
+
+##### 日志存在的问题
+
+###### 一种描述符对应不同类型的日志
+
+1. 
+
+![CPU_MINOR_THRESHOLD](C:\Users\t19525\AppData\Roaming\Typora\typora-user-images\image-20200708154737011.png)
+
+
+
+![image-20200708154905262](C:\Users\t19525\AppData\Roaming\Typora\typora-user-images\image-20200708154905262.png)
+
+2. 
+
