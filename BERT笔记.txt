@@ -10,8 +10,9 @@ WordpieceTokenizer的目的是将合成词分解成类似词根一样的词片�
 3、FullTokenizer
 FullTokenizer的作用就很显而易见了，对一个文本段进行以上两种解析，最后返回词（字）的数组，同时还提供token到id的索引以及id到token的索引。这里的token可以理解为文本段处理过后的最小单元。
 
-
 run_classifier.py
+
+```
 python run_classifier.py
   --data_dir=./data
   --task_name=news
@@ -26,6 +27,7 @@ python run_classifier.py
   --train_batch_size=16
   --learning_rate=5e-5
   --num_train_epochs=5.0
+```
 
 pretrain
 （sample_text）
@@ -74,7 +76,7 @@ INFO:tensorflow:  masked_lm_loss = 0.1944049
 INFO:tensorflow:  next_sentence_accuracy = 0.99875
 INFO:tensorflow:  next_sentence_loss = 0.0052026785
 
-
+```
 python extract_features.py \
   --input_file=input.txt \
   --output_file=/tmp/output.json \
@@ -84,18 +86,18 @@ python extract_features.py \
   --layers=-1,-2,-3,-4 \
   --max_seq_length=128 \
   --batch_size=8
+```
   
+
+`export CUDA_VISIBLE_DEVICES=3`
+
   
-  
-export CUDA_VISIBLE_DEVICES=3
-  
-  
-  
+
   INFO:tensorflow:Wrote 19025708 total instances
 
   
+
   
-  
-  
+
 
 

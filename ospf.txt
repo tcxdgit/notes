@@ -1,20 +1,18 @@
-
 开启OSPF进程，指定Router-id，进入OSPF协议视图
-[h3c]ospf 'process id' router-id 'rid'
+`[h3c]ospf 'process id' router-id 'rid'`
 
 进入区域视图
-[h3c-ospf-1]area 'area id'
+`[h3c-ospf-1]area 'area id'`
 
 宣告网段
-[h3c-ospf-1-area 0.0.0.0]network 'ip address' 'wild_mask'
-
----------------------------------------------------------
+`[h3c-ospf-1-area 0.0.0.0]network 'ip address' 'wild_mask'`
 
 查看OSPF邻居（FULL:邻接状态  2-Way: 邻居状态）
-[h3c]display ospf peer
+`[h3c]display ospf peer`
 
 查看OSPF链路状态数据库
-[h3c]display ospf lsdb
+`[h3c]display ospf lsdb`
 
 查看OSPF路由
-[h3c]display ospf routing
+`[h3c]display ospf routing`
+

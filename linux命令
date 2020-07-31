@@ -1,28 +1,26 @@
-
 查看ip地址
-hostname -i
+`hostname -i`
 
 监听特定网卡ens1f0，抓包
-tcpdump -i ens1f0 udp port 514
+`tcpdump -i ens1f0 udp port 514`
 
-# 杀死僵尸进程
-ps -ef | grep defunct | more
+杀死僵尸进程
+`ps -ef | grep defunct | more`
 kill掉对应的父进程
 
-
 查看centos版本
-rpm -q centos-release
+`rpm -q centos-release`
 
+超链接
 
-ln –s 源文件 目标文件
+`ln –s 源文件 目标文件`
 
 
 
 sftp连接：
-sftp -P 33904 root@183.129.199.122
+`sftp -P 33904 root@183.129.199.122`
 
-
-mkdir [-p] DirName
+`mkdir [-p] DirName`
 说明：建立一个子目录。
 参数：-p 确保目录名称存在，如果目录不存在的就新创建一个。
 
@@ -36,26 +34,25 @@ tar.gz tgz (tar.gz和tgz只是两种不同的书写方式，后者是一种简�
 其实这是对tar包进行gzip算法的压缩
 
 (1)打包压缩格式：
-tar -zcvf examples.tgz examples (examples当前执行路径下的目录)
+`tar -zcvf examples.tgz examples` (examples当前执行路径下的目录)
 
 说明：
 -z, --gzip filter the archive through gzip 通过gzip压缩的形式对文件进行归档
 
 举例：
-tar -zcvf file.tgz dir #dir目录
+`tar -zcvf file.tgz dir` #dir目录
 
 (2)释放解压格式：
 
-tar -zxvf examples.tar （解压至当前执行目录下）
-tar -zxvf examples.tar  -C /path (/path 解压至其它路径)
+`tar -zxvf examples.tar` （解压至当前执行目录下）
+`tar -zxvf examples.tar  -C /path` (/path 解压至其它路径)
 
 举例：
-tar -zcvf file.tgz
-tar -zcvf file.tgz -C /temp
-
-
-Acquire::http::Proxy "http://100.0.4.195:808"
+`tar -zcvf file.tgz`
+`tar -zcvf file.tgz -C /temp`
 
 3.2.119.5服务器，监听特定网卡ens1f0，抓包
-tcpdump -i ens1f0 udp port 514
+`tcpdump -i ens1f0 udp port 514`
+
+
 

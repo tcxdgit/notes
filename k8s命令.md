@@ -32,7 +32,7 @@
 
 ###### 查看pod映射出来的端口
 
-`kubectl get svc -nitoa |grep rsys`
+`kubectl get svc -nitoa |grep rsyslog`
 或
 `kubectl get services -nitoa | grep rsyslog`
 
