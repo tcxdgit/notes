@@ -12,3 +12,8 @@
 回退a.py这个文件的版本到上一个版本
 `git reset HEAD^ a.py`
 
+git配置用户名密码
+
+`git config --global user.name "username"` 
+`git config --global user.email "email"`
+
