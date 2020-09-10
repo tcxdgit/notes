@@ -10,3 +10,54 @@
 
 /etc/rsyslog.d目录下的*.conf文件
 
+ 
+
+1、logstash解析失败的日志保存到文件的路径如下：
+
+\#logstash pod中
+
+/opt/itoalog/diag/ITOA/logstash/
+
+\#服务器上
+
+/var/log/matrix-diag/ITOA/logstash/
+
+ 
+
+ 
+
+2、未匹配到module的原始日志保存到文件的路径如下：
+
+ 
+
+\#log_distribute pod中
+
+/opt/itoalog/diag/ITOA/SYSLOG/
+
+\#服务器
+
+/var/log/matrix-diag/ITOA/SYSLOG/
+
+ 
+
+ 
+
+3、rsyslog原始数据备份
+
+\#rsyslog pod中查看
+
+`/opt/itoalog/diag/ITOA/rsyslogbak`
+
+\#服务器上
+
+`/var/log/matrix-diag/ITOA/rsyslogbak`
+
+ 
+
+ 
+
+4、系统错误日志保存路径
+
+\#log_distribute pod中查看
+
+/var/itoalog/log/
