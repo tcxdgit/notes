@@ -42,6 +42,8 @@
 配置发送日志信息到IP地址为10.99.210.206的日志主机，端口默认514，日志主机记录工具为local5。
 `[Device] info-center loghost 10.99.210.206 facility local5`
 
+(注，查看sa南向ip在【系统】/【部署管理】/【智能分析引擎】)
+
 配置输出规则：允许default(所有)模块、等级高于等于informational的日志信息输出到日志主机。
 `[Device] info-center source default loghost level informational`
 

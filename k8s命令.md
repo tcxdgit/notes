@@ -76,7 +76,9 @@ kubectl cp net-tools-2.0-0.25.20131004git.el7.x86_64.rpm itoa/itoa-rsyslog-6bc6c
 
 
 
+Do docker images to find out the REPOSITORY and TAG of your local image. Then create a new tag for your local image :
 
+`docker tag sa/intelligent-alarm:1.0.0 matrix-registry.h3c.com:8088/sa/intelligent-alarm:1.0.0`
 
 
 

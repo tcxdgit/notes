@@ -17,3 +17,11 @@ git配置用户名密码
 `git config --global user.name "username"` 
 `git config --global user.email "email"`
 
+set http_proxy=http://t19525:1qaz2WSX@proxy.h3c.com:8080
+
+git 设置和取消代理
+git config --global https.proxy https://127.0.0.1:1086
+
+git config --global --unset http.proxy
+
+git config --global --unset https.proxy
