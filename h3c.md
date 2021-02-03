@@ -12,6 +12,26 @@
 | 10.99.216.98       | root/123456             |              |                                    |                             |            |
 | 10.99.216.86       | root/123456             | 单机版       | https://10.99.216.86:10443/portal/ | admin/admin@123             | 公共       |
 
+---------------
+
+前台URL
+
+http://10.99.216.111:30000/central/index.html#/sdwan/index.html#/overview/single-scene/wan-scene/wanOverview 
+
+前台 用户名/密码: admin/ADMIN@123
+
+后台IP 10.99.216.78
+
+后台 用户名/密码: root/123456
+
+-----------------------
+
+http://10.99.210.162:30000/
+
+前台 用户名/密码: admin/Pwd@12345
+
+
+
  **绿区服务器**
 
 绿区SA环境已经部署完成 ( 如果本地PC不能访问，请添加静态路由：`route add 3.0.0.0 mask 255.0.0.0 3.0.0.194 –p`)
